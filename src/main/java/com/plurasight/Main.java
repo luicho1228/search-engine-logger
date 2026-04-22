@@ -1,17 +1,39 @@
 package com.plurasight;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        saveLog();
+    }
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
+    public static void saveLog(){
+        try {
+            FileWriter fileWriter = new FileWriter("logs.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            String launchLog = now.format(formatter) + " Launch \n";
+            bufferedWriter.write(launchLog);
+            Scanner scanner = new Scanner(System.in);
+            String userInput = "";
+            do {
+                System.out.println("Enter a search term(X to exit): ");
+                userInput = scanner.nextLine();
+                if (!(userInput.equalsIgnoreCase("x"))) {
+                    bufferedWriter.write(LocalDateTime.now().format(formatter) + " search : " + userInput + "\n");
+                }
+            }while (!(userInput.equalsIgnoreCase("x")));
+            bufferedWriter.write(LocalDateTime.now().format(formatter) + " exit \n");
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
